@@ -486,8 +486,17 @@ class App(ctk.CTk):
 
         # Сбор данных для JSON
         data = {}
+
         for key, widget in self.inputs.items():
-            data[key] = widget.get()
+            value = widget.get().strip()
+
+            # Проверяем, заполнено ли поле чем-то осмысленным
+            # Если пусто или там плейсхолдер — игнорируем и идем к следующему ключу
+            if value == "" or "Amplasat in" in value or "m²" in value:
+                continue  # Пропускаем, в JSON этого ключа не будет
+
+            # Если значение есть — сохраняем
+            data[key] = value
 
         for key, widget in self.checkboxes.items():
             data[key] = 1 if widget.get() else 0
@@ -621,12 +630,12 @@ class App(ctk.CTk):
         back_btn.place(relx=0.5, rely=0.55, anchor="center")
 
     def is_data_complete(self):
-        """Проверяет, чтобы все текстовые поля и меню были заполнены"""
+        """Проверяет, чтобы все текстовые поля и меню были заполнены
         for key, widget in self.inputs.items():
             value = widget.get().strip()
             # Проверяем на пустую строку или если это описание и оно пустое
             if value == "" or value == "Text here...":
-                return False
+                return False"""
         return True
 
 if __name__ == "__main__":
