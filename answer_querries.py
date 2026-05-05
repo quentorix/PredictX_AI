@@ -231,8 +231,7 @@ def main():
     x = df.drop(columns=["id", "price"])
     y = abs(model.predict(x))
     print(y)
-
-
+    a = y[0]
     print(df)
 
-    return y
+    return a
