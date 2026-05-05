@@ -11,5 +11,6 @@ querry/
 __pycache__/
 *.pyc
 
-# Модели (если они весят больше 100мб)
-model.pkl
+# Данные для отладки
+data.json
+datatest.json
