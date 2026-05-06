@@ -114,6 +114,8 @@ def main():
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
         data["id"] = 1
+        if "description" not in data:
+            data["description"] = ""
         data["description"]=descriptionpreprocessing(data["description"])
         # print(data["description"])
         # print(folder)
