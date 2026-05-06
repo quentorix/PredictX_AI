@@ -2,7 +2,7 @@
 .venv/
 venv/
 env/
-.idea\
+.idea/
 
 # Огромные файлы данных
 data123.json
