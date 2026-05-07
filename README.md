@@ -24,6 +24,7 @@ Data Science: Pandas, Numpy, Scikit-learn
 Model Management: Joblib
 
 📦 How It Works
+To launch the programm you need to copy everuthing from src folder, instal required libraries and launch ui.py.
 Data Collection: Users upload apartment photos and input technical specifications (area, floor, location, etc.).
 
 Input Validation: A built-in validator ensures no critical fields are left blank before triggering the AI.
