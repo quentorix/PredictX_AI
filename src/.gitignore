@@ -1,17 +1,17 @@
-# Виртуальное окружение
 .venv/
 venv/
 env/
 .idea/
+data/
 
-# Огромные файлы данных
+
 data123.json
 querry/
 
-# Кэш Python
+
 __pycache__/
 *.pyc
 
-# Данные для отладки
+
 data.json
 datatest.json
