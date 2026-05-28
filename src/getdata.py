@@ -1,9 +1,8 @@
 import os
 import time
-from multiprocessing.reduction import duplicate
 
 import requests
-from playwright.sync_api import sync_playwright, Browser
+
 from bs4 import BeautifulSoup
 import re
 from playwright.sync_api import sync_playwright
@@ -30,7 +29,7 @@ def get_with_retry(url, retries=3, delay=2, timeout=10):
     return None
 
 def get_post_urls_for_page(html:str) -> list:
-    # находим нужный div
+
     soup = BeautifulSoup(html, "html.parser")
     container = soup.find("div", class_="styles_list__pfMHf styles_list__photo__ogPFb")
 
@@ -62,12 +61,8 @@ def get_all_posts_links(browser, from_file = False):
             page.goto(f"https://999.md/ro/list/real-estate/apartments-and-rooms?page={i}&o_16_1=776")
             time.sleep(1)
 
-            # подождать загрузку (важно для динамики)
             page.wait_for_load_state("networkidle")
-            # page.wait_for_selector(
-            #     "div.styles_list__pfMHf.styles_list__photo__ogPFb",
-            #     timeout=15000
-            # )
+
 
             html = page.content()
             all_posts_links.extend(get_post_urls_for_page(html))
@@ -93,7 +88,6 @@ def parse_post(link):
 
     soup = BeautifulSoup(html, "html.parser")
 
-    # block = soup.find("div", {"styles_group__aota8": "Caracteristici"})
 
     block = soup.find("div", attrs={"data-testid": "Caracteristici"})
 
@@ -103,8 +97,6 @@ def parse_post(link):
 
     post_data = {}
 
-    # перебираем все li (каждая характеристика)
-    # logging.debug(html)
     if block is None:
         return
     for li in block.find_all("li"):
@@ -224,8 +216,8 @@ def main():
         single_page = False
 
         if not single_page:
-            for i in range(10000):
-                logging.debug(i)
+            for i in range(len(links)):
+                logging.debug(f"{i}/{len(links)}")
                 parse_post(links[i])
         else:
             parse_post("https://999.md/ro/104092842")

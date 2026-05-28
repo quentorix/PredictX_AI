@@ -1,19 +1,10 @@
 import os
-import pandas as pd
 import numpy as np
-import json
-import cv2
-from pathlib import Path
-import re
+
 import nltk
-from nltk.corpus import stopwords
-from nltk.stem import PorterStemmer, SnowballStemmer, WordNetLemmatizer
-import string
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-import matplotlib.pyplot as plt
-import seaborn as sns
-from PIL import Image, ImageOps
-from torchvision import models, transforms
+
+from PIL import Image
+from torchvision import transforms
 import torch
 from sentence_transformers import SentenceTransformer
 nltk.download('punkt_tab')
@@ -22,16 +13,17 @@ nltk.download('wordnet')
 from pathlib import Path
 import json
 import pandas as pd
+from transformers import CLIPProcessor, CLIPModel
 
 BASE_PATH = "data"
 IMG_SIZE = (224, 224)
 device = "cuda" if torch.cuda.is_available() else "cpu"
-text_model = SentenceTransformer("all-MiniLM-L6-v2")
-resnet = models.resnet18(weights=models.ResNet18_Weights.DEFAULT)
-resnet.fc = torch.nn.Identity()  # убираем последний классификатор
-resnet = resnet.to(device)
-resnet.eval()
 
+clip_model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32").to(device)
+clip_processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
+
+clip_model.eval()
+text_model = SentenceTransformer("sentence-transformers/all-mpnet-base-v2")
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
@@ -41,51 +33,53 @@ transform = transforms.Compose([
     )
 ])
 
-def process_image(path, size=IMG_SIZE):
-    img = Image.open(path).convert("RGB")
+def get_clip_image_embedding(image_path):
+    img = Image.open(image_path).convert("RGB")
 
-    img.thumbnail(size)
+    inputs = clip_processor(
+        images=img,
+        return_tensors="pt"
+    ).to(device)
 
-    new_img = Image.new("RGB", size, (0, 0, 0))
-    x = (size[0] - img.width) // 2
-    y = (size[1] - img.height) // 2
-    new_img.paste(img, (x, y))
+    with torch.no_grad():
+        outputs = clip_model.get_image_features(**inputs)
 
-    arr = np.array(new_img) / 255.0
-    arr = np.transpose(arr, (2, 0, 1))  # (C, H, W)
+    if not isinstance(outputs, torch.Tensor):
+        if hasattr(outputs, "image_embeds") and outputs.image_embeds is not None:
+            outputs = outputs.image_embeds
+        elif hasattr(outputs, "pooler_output") and outputs.pooler_output is not None:
+            outputs = outputs.pooler_output
+        elif hasattr(outputs, "last_hidden_state") and outputs.last_hidden_state is not None:
+            outputs = outputs.last_hidden_state[:, 0, :]
+        else:
+            raise ValueError("Не найден tensor embedding в output CLIP")
 
-    return arr
+    emb = outputs / outputs.norm(dim=-1, keepdim=True)
 
-# =====================
-# обработка всех картинок объявления
-# =====================
+    return emb.cpu().numpy()[0]
 def process_ad_images(folder_path):
     folder = Path(folder_path)
-
     embeddings = []
 
     for file in sorted(folder.iterdir()):
         if file.suffix.lower() in [".jpg", ".jpeg", ".png", ".webp"]:
             try:
-                img = Image.open(file).convert("RGB")
-                img_tensor = transform(img).unsqueeze(0).to(device)
-
-                with torch.no_grad():
-                    emb = resnet(img_tensor)  # shape: (1, 512)
-
-                embeddings.append(emb.cpu().numpy()[0])
-
+                emb = get_clip_image_embedding(file)
+                embeddings.append(emb)
             except Exception as e:
                 print(f"Ошибка с картинкой {file}: {e}")
+
 
     if len(embeddings) == 0:
         return np.zeros(512)
 
-    return np.mean(embeddings, axis=0)
+    return np.max(embeddings, axis=0)
 
 def descriptionpreprocessing(text):
     if text is None or str(text).strip() == "":
-        return np.zeros(384)
+        return np.zeros(768)
+
+    emb = text_model.encode(str(text), normalize_embeddings=True)
 
     embedding = text_model.encode(str(text))
 
@@ -97,6 +91,7 @@ folders = [f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
 rows = []
 # print(folders)
 i = 0
+
 for folder in folders:
     path = Path("data") / folder / "data.json"
 
@@ -104,14 +99,12 @@ for folder in folders:
         data = json.load(f)
         data["id"] = folder
         data["description"]=descriptionpreprocessing(data["description"])
-        # print(data["description"])
-        # print(folder)
+
 
     folder_path = os.path.join(BASE_PATH, folder)
-    # картинки
     images = process_ad_images(folder_path)
     images.reshape(-1)
-    data["images"] = images  # 👈 добавляем массив
+    data["images"] = images
     print(i)
     i+=1
 
@@ -147,8 +140,8 @@ df[cols] = df[cols].fillna(0)
 df["Număr de camere"] = (
     df["Număr de camere"]
     .str.extract(r"(\d+)")
-    .astype("float")   # сначала float (из-за NaN)
-    .astype("Int64")   # nullable int
+    .astype("float")
+    .astype("Int64")
 )
 num_cols = df.select_dtypes(include="number").columns
 df[num_cols] = df[num_cols].fillna(0)
@@ -160,7 +153,7 @@ df = df.drop(columns=["description", "images"])
 df = pd.get_dummies(
     df,
     columns=["Autorul anunțului", "Living", "Fond locativ", "Dezvoltator", "Starea apartamentului", "Compartimentare", "Loc de parcare", "Tip clădire", "Copii", "Animale"],
-    drop_first=False,   # keeps e.g. smokes_yes and gender_M (or similar)
+    drop_first=False,
     dtype=int
 )
 
