@@ -38,3 +38,6 @@ Text: The description is encoded into a 384-dimensional semantic embedding.
 Tabular: Features are cleaned, normalized, and one-hot encoded.
 
 Inference: The fused feature vector is fed into a trained Regression model to predict the final market price.
+
+Link to file data123.json:
+  https://drive.google.com/file/d/1uxrHZiYgFYY6UCNEniIx8vES8pShQ2D5/view
