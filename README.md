@@ -95,9 +95,3 @@ The Fusion: All vectors are concatenated and fed into an XGBoost Regressor to pr
 * Real Estate Agents: Automate preliminary valuations for new client objects.
 
 --------------------------------------------------------------------------------
-## 📝 Roadmap
-* [ ] Integration of a dedicated Attention-based Fusion Layer.
-* [ ] Real-time price heatmap for Chisinau districts.
-* [ ] Outlier detection to reduce Mean Absolute Percentage Error (MAPE).
-
----
