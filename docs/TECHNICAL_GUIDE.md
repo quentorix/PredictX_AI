@@ -28,11 +28,14 @@ The concatenated vector is processed by an **XGBoost Regressor**, selected for i
 *   **Current Metrics:** 
     *   MAE: ~€16,012
     *   R² Score: 0.82
-    *   MAPE: 223% (Note: High percentage error is attributed to outlier listings on 999.md with €1 dummy prices).
+    *   MAPE: 223% (Note: MAPE: 223% (Note: High percentage error is attributed to outlier listings on 999.md with €1 dummy prices)."The high MAPE (223%) observed in our metrics is largely a result of data noise on 999.md, where sellers frequently list properties with placeholder prices (e.g., 1 EUR or 100 EUR) to gain visibility. While these outliers significantly inflate percentage error metrics, the Mean Absolute Error (MAE) of ~€16,012 remains a more reliable indicator of the model's performance for standard listings" .).
 
 ## 3. Data Collection Pipeline
 *   **Source:** Real-time scraping of **999.md**.
 *   **Tools:** Playwright (browser automation) and BeautifulSoup4.
 *   **Dataset:** 23,353 unique listings used for training and validation.
+
+
+
 
 --------------------------------------------------------------------------------

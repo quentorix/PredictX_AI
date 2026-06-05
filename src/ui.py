@@ -571,6 +571,13 @@ class App(ctk.CTk):
         high = price * 1.1
         self.create_result_card(cards_frame, "Price range", f"€ {low / 1000:.1f}k–{high / 1000:.1f}k", "± 10%", 2)
 
+        disclaimer_text = (
+            "DISCLAIMER: These estimates are for informational purposes only and "
+            "do not constitute financial advice. Real estate values are subject to "
+            "market volatility and data inaccuracies."
+        )
+
+
         try:
             img_raw = Image.open("correlation_heatmap.png")
             self.home_img2 = ctk.CTkImage(light_image=img_raw, dark_image=img_raw, size=(1100, 700))
