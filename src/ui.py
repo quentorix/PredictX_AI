@@ -17,6 +17,7 @@ class App(ctk.CTk):
         self.geometry("1100x700")
         self.configure(fg_color="#FFFFFF")
 
+        self.is_the_data_in_order = True
 
         self.grid_rowconfigure(1, weight=1)
         self.grid_columnconfigure(0, weight=1)
@@ -398,7 +399,7 @@ class App(ctk.CTk):
 
     def show_details_input(self):
         self.clear_container()
-
+        self.is_the_data_in_order = True
 
         self.inputs = {}
         self.checkboxes = {}
@@ -531,6 +532,13 @@ class App(ctk.CTk):
                     print(f"Ошибка копирования {file_path}: {e}")
         else:
             print("Фотографии не были выбраны!")
+            with open("empty_data.json", "r", encoding="utf-8") as empty_data:
+                empty_data_json = json.load(empty_data)
+                print(empty_data_json)
+                print(data)
+                if (empty_data_json == data):
+                    self.is_the_data_in_order = False
+                    self.show_error_screen("You have not entered or selected anything!")
 
         print("--- Все данные собраны в папке 'querry' ---")
 
@@ -604,14 +612,10 @@ class App(ctk.CTk):
         else:
             os.makedirs(folder)
     def start_ai_process(self):
-
-
         self.save_to_json()
-
-        self.show_processing_screen()
-
-
-        threading.Thread(target=self.run_ai_thread, daemon=True).start()
+        if (self.is_the_data_in_order):
+            self.show_processing_screen()
+            threading.Thread(target=self.run_ai_thread, daemon=True).start()
 
     def run_ai_thread(self):
         # Call function from ai_engine.py
