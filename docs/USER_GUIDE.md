@@ -28,3 +28,8 @@ Welcome to PredictX AI! This guide will help you navigate the application to get
 *   **Model Not Loading:** Verify that `model.pkl` is located in the `/models` folder.
 
 --------------------------------------------------------------------------------
+## Screenshots
+<img width="1100" height="732" alt="image" src="https://github.com/user-attachments/assets/93d51230-a349-4ef7-8810-41ba0acec6b8" />
+<img width="1100" height="732" alt="image" src="https://github.com/user-attachments/assets/42bfbd4c-95e6-4381-aa5d-545d14864202" />
+<img width="1100" height="732" alt="image" src="https://github.com/user-attachments/assets/4f665f4f-3742-44eb-8e2d-6695a46c95b5" />
+<img width="1100" height="732" alt="image" src="https://github.com/user-attachments/assets/89f06b13-cd25-4545-87b5-46f7ae8f2402" />
