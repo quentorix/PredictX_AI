@@ -100,3 +100,6 @@ The Fusion: All vectors are concatenated and fed into an XGBoost Regressor to pr
 For detailed information on how the system works and how to use it, please refer to our documentation:
 *   [Technical Architecture & ML Pipeline](docs/TECHNICAL_GUIDE.md)
 *   [User Operation Guide](docs/USER_GUIDE.md)
+--------------------------------------------------------------------------------
+## [Link to training data](https://drive.google.com/drive/folders/1M0nbr4L8ZBoEOUA12Jq1nu5_9jvDuXkC?usp=sharing)
+
