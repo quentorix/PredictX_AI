@@ -299,7 +299,7 @@ class App(ctk.CTk):
                 # Save the link to the image
                 icon_label.image = img_icon
             except Exception as e:
-                print(f"Не удалось загрузить иконку {image_path}: {e}")
+                print(f"Failed to load icon {image_path}: {e}")
 
         # Текстовые блоки
         ctk.CTkLabel(
@@ -388,12 +388,12 @@ class App(ctk.CTk):
 
     def browse_files(self, n):
         files = filedialog.askopenfilenames(
-            title="Выберите фотографии квартиры",
-            filetypes=[("Изображения", "*.png *.jpg *.jpeg")]
+            title="Select photos of the apartment",
+            filetypes=[("Images", "*.png *.jpg *.jpeg")]
         )
         if files:
-            self.selected_photo_paths = list(files)  # Сохраняем пути к файлам
-            print(f"Выбрано файлов: {len(self.selected_photo_paths)}")
+            self.selected_photo_paths = list(files)
+            print(f"Selected files: {len(self.selected_photo_paths)}")
             n.configure(text=f"Selected: {len(self.selected_photo_paths)} files")
 
 
@@ -483,12 +483,10 @@ class App(ctk.CTk):
     def save_to_json(self):
 
         self.clear_querry_folder()
-        # Создаем папку 'querry', если её еще нет
         folder_name = "querry"
         if not os.path.exists(folder_name):
             os.makedirs(folder_name)
 
-        # Сбор данных для JSON
         data = {}
 
         for key, widget in self.inputs.items():
@@ -512,9 +510,9 @@ class App(ctk.CTk):
         try:
             with open(json_path, "w", encoding="utf-8") as f:
                 json.dump(data, f, ensure_ascii=False, indent=4)
-            print(f"JSON сохранен в {json_path}")
+            print(f"JSON is saved in {json_path}")
         except Exception as e:
-            print(f"Ошибка записи JSON: {e}")
+            print(f"JSON write error: {e}")
 
 
         if hasattr(self, 'selected_photo_paths'):
@@ -527,11 +525,11 @@ class App(ctk.CTk):
                     destination = os.path.join(folder_name, new_name)
 
                     shutil.copy2(file_path, destination)
-                    print(f"Скопировано: {new_name}")
+                    print(f"Copied: {new_name}")
                 except Exception as e:
-                    print(f"Ошибка копирования {file_path}: {e}")
+                    print(f"Copy error {file_path}: {e}")
         else:
-            print("Фотографии не были выбраны!")
+            print("No photos have been selected!")
             with open("empty_data.json", "r", encoding="utf-8") as empty_data:
                 empty_data_json = json.load(empty_data)
                 print(empty_data_json)
@@ -540,7 +538,7 @@ class App(ctk.CTk):
                     self.is_the_data_in_order = False
                     self.show_error_screen("You have not entered or selected anything!")
 
-        print("--- Все данные собраны в папке 'querry' ---")
+        print("--- All data is collected in the 'querry' folder ---")
 
     def show_results_screen(self, price, confidence):
         self.clear_container()
@@ -615,7 +613,7 @@ class App(ctk.CTk):
                     elif os.path.isdir(file_path):
                         shutil.rmtree(file_path)
                 except Exception as e:
-                    print(f'Не удалось удалить {file_path}. Причина: {e}')
+                    print(f'Failed to delete {file_path}. Reason: {e}')
         else:
             os.makedirs(folder)
     def start_ai_process(self):
