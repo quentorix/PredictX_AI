@@ -95,3 +95,8 @@ The Fusion: All vectors are concatenated and fed into an XGBoost Regressor to pr
 * Real Estate Agents: Automate preliminary valuations for new client objects.
 
 --------------------------------------------------------------------------------
+
+## 📚 Documentation
+For detailed information on how the system works and how to use it, please refer to our documentation:
+*   [Technical Architecture & ML Pipeline](docs/TECHNICAL_GUIDE.md)
+*   [User Operation Guide](docs/USER_GUIDE.md)
