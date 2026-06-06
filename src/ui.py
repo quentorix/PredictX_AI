@@ -631,7 +631,7 @@ class App(ctk.CTk):
 
         with open("model_score.json", "r", encoding="utf-8") as file:
             list_conf = json.load(file)
-            confidence = list_conf[0]["R2"]
+            confidence = list_conf["test_metrics"]["R2"]
             print("CONF: ", confidence)
 
         # Return result in main threat by after()
