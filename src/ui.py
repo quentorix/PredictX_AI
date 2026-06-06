@@ -17,6 +17,7 @@ class App(ctk.CTk):
         self.geometry("1100x700")
         self.configure(fg_color="#FFFFFF")
 
+        self.is_the_data_in_order = True
 
         self.grid_rowconfigure(1, weight=1)
         self.grid_columnconfigure(0, weight=1)
@@ -70,7 +71,7 @@ class App(ctk.CTk):
         self.main_container.grid_columnconfigure(1, weight=1)
 
         left_frame = ctk.CTkFrame(self.main_container, fg_color="transparent")
-        left_frame.grid(row=0, column=0, sticky="nsew", padx=60, pady=40)
+        left_frame.grid(row=0, column=0, sticky="nsew", padx=60, pady=120)
 
         title = ctk.CTkLabel(left_frame, text="Now accurately\npredict price of\napartments.",
                              font=("Arial Bold", 48), text_color="#1a1a1a",
@@ -122,8 +123,7 @@ class App(ctk.CTk):
             font=ctk.CTkFont(size=28, weight="bold"),
             text_color="black"
         )
-        title.place(relx=0, rely=0.45, anchor="w")  # Немного поднял rely, чтобы не улетало вниз
-
+        title.place(relx=0, rely=0.45, anchor="w")
         desc = ctk.CTkLabel(
             left,
             text="Clean input flow, transparent insights, and a confidence score to help you decide.",
@@ -146,7 +146,7 @@ class App(ctk.CTk):
             right, 0,
             "1) Fill details",
             "Choose location, size, rooms, and condition in a structured form.",
-            "icons/2.png"  # Убрал пути к иконкам, чтобы не было ошибок, если файлов нет
+            "icons/2.png"
         )
 
         self.create_card(
@@ -176,10 +176,10 @@ class App(ctk.CTk):
         card.grid_propagate(False)
         card.grid_columnconfigure(1, weight=1)
 
-        # Работа с изображением или заглушкой
+
         if image_path and os.path.exists(image_path):
             try:
-                # Открываем и подготавливаем изображение
+
                 img_data = Image.open(image_path)
 
                 my_image = ctk.CTkImage(light_image=img_data, size=(60, 60))
@@ -191,10 +191,9 @@ class App(ctk.CTk):
                 icon_display.image = my_image
             except Exception as e:
                 print(f"Ошибка загрузки фото: {e}")
-                image_path = None  # Если ошибка
-
+                image_path = None
         if not image_path:
-            # ICON PLACEHOLDER (Если путь пустой или файл не найден)
+
             icon_container = ctk.CTkFrame(card, width=60, height=60, fg_color="#D0D0D0", corner_radius=10)
             icon_container.grid(row=0, column=0, rowspan=2, padx=20, pady=20)
 
@@ -232,7 +231,7 @@ class App(ctk.CTk):
         self.main_container.grid_columnconfigure(1, weight=2)
         self.main_container.grid_rowconfigure(0, weight=1)
 
-        # ЛЕВАЯ ПАНЕЛЬ
+        # LEFT PANEL
         left_panel = ctk.CTkFrame(self.main_container, fg_color="transparent")
         left_panel.grid(row=0, column=0, sticky="nsew", padx=(60, 20))
 
@@ -253,9 +252,10 @@ class App(ctk.CTk):
         )
         subtitle.place(relx=0, rely=0.5, anchor="w")
 
-        # ПРАВАЯ ПАНЕЛЬ
+        # RIGHT PANEL
         right_panel = ctk.CTkFrame(self.main_container, fg_color="transparent")
-        # ИСПРАВЛЕНИЕ: Уменьшил pady с 60 до 20, чтобы освободить место по вертикали
+
+
         right_panel.grid(row=0, column=1, sticky="nsew", padx=(20, 60), pady=20)
 
         for i in range(3): right_panel.grid_rowconfigure(i, weight=1)
@@ -274,11 +274,11 @@ class App(ctk.CTk):
             self.create_analysis_item(right_panel, *item)
 
     def create_analysis_item(self, parent, title, sub, bold_text, row, col, image_path=None):
-        # Контейнер для одного элемента
+
         item_frame = ctk.CTkFrame(parent, fg_color="transparent")
         item_frame.grid(row=row, column=col, pady=5)
 
-        # Круглая подложка под иконку
+        # Round icon background
         icon_circle = ctk.CTkFrame(
             item_frame, width=70, height=70,
             corner_radius=35,
@@ -287,7 +287,6 @@ class App(ctk.CTk):
         icon_circle.pack(pady=(0, 10))
         icon_circle.pack_propagate(False)
 
-        # Вставляем изображение, если путь указан и файл существует
         if image_path and os.path.exists(image_path):
             try:
                 img_data = Image.open(image_path)
@@ -297,10 +296,10 @@ class App(ctk.CTk):
                 icon_label = ctk.CTkLabel(icon_circle, image=img_icon, text="")
                 icon_label.place(relx=0.5, rely=0.5, anchor="center")
 
-                # Сохраняем ссылку на картинку
+                # Save the link to the image
                 icon_label.image = img_icon
             except Exception as e:
-                print(f"Не удалось загрузить иконку {image_path}: {e}")
+                print(f"Failed to load icon {image_path}: {e}")
 
         # Текстовые блоки
         ctk.CTkLabel(
@@ -321,53 +320,59 @@ class App(ctk.CTk):
             text_color="#1a1a1a"
         ).pack(pady=(5, 10))
 
+
     def show_estimate(self):
         self.clear_container()
 
-        # Конфигурация сетки
         self.main_container.grid_columnconfigure(0, weight=1)
         self.main_container.grid_columnconfigure(1, weight=1)
         self.main_container.grid_rowconfigure(0, weight=1)
 
-        # ЛЕВАЯ ПАНЕЛЬ
-        left_side = ctk.CTkFrame(self.main_container, fg_color="transparent")
-        left_side.grid(row=0, column=0, sticky="nsew", padx=(80, 40), pady=60)
 
-        # Иконка icons/4.png
+        left_side = ctk.CTkFrame(self.main_container, fg_color="transparent")
+        left_side.grid(row=0, column=0, sticky="nsew", padx=(80, 100), pady=60)
+
+
+        center_content = ctk.CTkFrame(left_side, fg_color="transparent")
+        center_content.pack(expand=True)
+
+
         try:
             raw_img = Image.open("icons/4.png")
             self.upload_icon_image = ctk.CTkImage(light_image=raw_img, dark_image=raw_img, size=(160, 160))
-            ctk.CTkLabel(left_side, image=self.upload_icon_image, text="").pack(anchor="w", pady=(0, 25))
+            ctk.CTkLabel(center_content, image=self.upload_icon_image, text="").pack(anchor="center", pady=(0, 25))
         except:
-            ctk.CTkFrame(left_side, width=160, height=160, corner_radius=20, fg_color="#f2f2f2").pack(anchor="w",
-                                                                                                      pady=(0, 25))
+            ctk.CTkFrame(center_content, width=160, height=160, corner_radius=20, fg_color="#f2f2f2").pack(
+                anchor="center", pady=(0, 25))
 
-        ctk.CTkLabel(left_side, text="Upload Photos", font=("Arial Bold", 42), text_color="#1a1a1a").pack(
-            anchor="w", pady=(0, 10))
-        ctk.CTkLabel(left_side,
+
+        ctk.CTkLabel(center_content, text="Upload Photos", font=("Arial Bold", 42), text_color="#1a1a1a").pack(
+            anchor="center", pady=(0, 10))
+
+
+        ctk.CTkLabel(center_content,
                      text="To get a precise AI estimation, please upload at least 3-5 high-quality photos of your apartment.",
-                     font=("Arial", 17), text_color="#555555", wraplength=420, justify="left").pack(anchor="w")
+                     font=("Arial", 17), text_color="#555555", wraplength=420, justify="center").pack(anchor="center")
 
-        # ПРАВАЯ ПАНЕЛЬ
+
         right_side = ctk.CTkFrame(self.main_container, fg_color="transparent")
         right_side.grid(row=0, column=1, sticky="nsew", padx=(40, 80), pady=100)
 
-        # Зона загрузки
+        # Зона drop_zone
         drop_zone = ctk.CTkFrame(right_side, fg_color="#fcfcfc", border_width=1, border_color="#e5e5e5",
                                  corner_radius=30)
         drop_zone.pack(fill="both", expand=True, pady=(0, 30))
 
         ctk.CTkLabel(drop_zone, text="Drag & Drop files here\nor click to browse",
                      font=("Arial", 15), text_color="#b0b0b0").place(relx=0.5, rely=0.42, anchor="center")
-
-        # КНОПКА С ВЫЗОВОМ browse_files
+        n = ctk.CTkLabel(right_side, text="Selected: 0 files", font=("Arial", 17), text_color="#555555", wraplength=420, justify="center")
         ctk.CTkButton(drop_zone, text="Select Files",
                       fg_color="#1a1a1a", hover_color="#333333",
                       width=150, height=44, corner_radius=12,
                       font=("Arial Bold", 13),
-                      command=self.browse_files).place(relx=0.5, rely=0.58, anchor="center")
+                      command= lambda : self.browse_files(n)).place(relx=0.5, rely=0.58, anchor="center")
 
-        # Кнопка Next Step
+        n.pack(pady=(0, 30), anchor="s")
         self.next_step_btn = ctk.CTkButton(
             right_side,
             text="Next Step →",
@@ -377,26 +382,25 @@ class App(ctk.CTk):
             height=52,
             corner_radius=15,
             font=("Arial Bold", 15),
-            # Вот эта команда связывает экраны:
             command=self.show_details_input
         )
         self.next_step_btn.pack(side="right")
 
-
-
-    def browse_files(self):
+    def browse_files(self, n):
         files = filedialog.askopenfilenames(
-            title="Выберите фотографии квартиры",
-            filetypes=[("Изображения", "*.png *.jpg *.jpeg")]
+            title="Select photos of the apartment",
+            filetypes=[("Images", "*.png *.jpg *.jpeg")]
         )
         if files:
-            self.selected_photo_paths = list(files)  # Сохраняем пути к файлам
-            print(f"Выбрано файлов: {len(self.selected_photo_paths)}")
+            self.selected_photo_paths = list(files)
+            print(f"Selected files: {len(self.selected_photo_paths)}")
+            n.configure(text=f"Selected: {len(self.selected_photo_paths)} files")
+
 
     def show_details_input(self):
         self.clear_container()
+        self.is_the_data_in_order = True
 
-        # Словари для хранения ссылок на виджеты
         self.inputs = {}
         self.checkboxes = {}
 
@@ -410,14 +414,14 @@ class App(ctk.CTk):
         form_frame.pack(fill="both", expand=True, padx=20)
         form_frame.grid_columnconfigure((0, 1), weight=1)
 
-        # --- ЛЕВАЯ КОЛОНКА (Списки и Текст) ---
+
         left_col = ctk.CTkFrame(form_frame, fg_color="#F9F9F9", corner_radius=20, border_width=1,
                                 border_color="#EEEEEE")
         left_col.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
 
         ctk.CTkLabel(left_col, text="Main Parameters", font=("Arial Bold", 18)).pack(pady=15)
 
-        # Соответствие ключей из твоего фото полям ввода
+
         num_fields = [
             ("Autorul anunțului", "OptionMenu", ['Persoană fizică', 'Agenție', 'Dezvoltator imobiliar', 'Bancă']),
             ("Număr de camere", "OptionMenu", ['O cameră', 'Apartament cu 2 camere', 'Apartament cu 3 camere']),
@@ -448,7 +452,7 @@ class App(ctk.CTk):
                 widget.pack(fill="x", padx=25, pady=(0, 10))
                 self.inputs[key] = widget
 
-        # --- ПРАВАЯ КОЛОНКА (Галочки 1/0) ---
+
         right_col = ctk.CTkFrame(form_frame, fg_color="#F9F9F9", corner_radius=20, border_width=1,
                                  border_color="#EEEEEE")
         right_col.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
@@ -475,86 +479,111 @@ class App(ctk.CTk):
         calculate_btn.pack(pady=40, padx=100, fill="x")
 
 
-    # 2. Обновленная функция сохранения
+
     def save_to_json(self):
 
         self.clear_querry_folder()
-        # Создаем папку 'querry', если её еще нет
         folder_name = "querry"
         if not os.path.exists(folder_name):
             os.makedirs(folder_name)
 
-        # Сбор данных для JSON
         data = {}
 
         for key, widget in self.inputs.items():
             value = widget.get().strip()
 
-            # Проверяем, заполнено ли поле чем-то осмысленным
-            # Если пусто или там плейсхолдер — игнорируем и идем к следующему ключу
-            if value == "" or "Amplasat in" in value or "m²" in value:
-                continue  # Пропускаем, в JSON этого ключа не будет
 
-            # Если значение есть — сохраняем
+            if value == "" or "Amplasat in" in value or "m²" in value:
+                continue
+            if (value == ""):
+                if (key=="description"):
+                    value = ""
+                else:
+                    value=0
             data[key] = value
 
         for key, widget in self.checkboxes.items():
             data[key] = 1 if widget.get() else 0
 
-        # Сохраняем JSON прямо в папку 'querry'
+
         json_path = os.path.join(folder_name, "data.json")
         try:
             with open(json_path, "w", encoding="utf-8") as f:
                 json.dump(data, f, ensure_ascii=False, indent=4)
-            print(f"JSON сохранен в {json_path}")
+            print(f"JSON is saved in {json_path}")
         except Exception as e:
-            print(f"Ошибка записи JSON: {e}")
+            print(f"JSON write error: {e}")
 
-        # Копируем фотографии в папку 'querry'
+
         if hasattr(self, 'selected_photo_paths'):
             for i, file_path in enumerate(self.selected_photo_paths):
                 try:
-                    # Получаем расширение файла (например, .jpg)
+
                     ext = os.path.splitext(file_path)[1]
-                    # Новое имя файла внутри папки (например, photo_1.jpg)
+                    # New name of file into fold (for example, photo_1.jpg)
                     new_name = f"photo_{i + 1}{ext}"
                     destination = os.path.join(folder_name, new_name)
 
                     shutil.copy2(file_path, destination)
-                    print(f"Скопировано: {new_name}")
+                    print(f"Copied: {new_name}")
                 except Exception as e:
-                    print(f"Ошибка копирования {file_path}: {e}")
+                    print(f"Copy error {file_path}: {e}")
         else:
-            print("Фотографии не были выбраны!")
+            print("No photos have been selected!")
+            with open("empty_data.json", "r", encoding="utf-8") as empty_data:
+                empty_data_json = json.load(empty_data)
+                print(empty_data_json)
+                print(data)
+                if (empty_data_json == data):
+                    self.is_the_data_in_order = False
+                    self.show_error_screen("You have not entered or selected anything!")
 
-        print("--- Все данные собраны в папке 'querry' ---")
+        print("--- All data is collected in the 'querry' folder ---")
 
-    def show_results_screen(self, price):
+    def show_results_screen(self, price, confidence):
         self.clear_container()
-
-        # Заголовок
-        header_frame = ctk.CTkFrame(self.main_container, fg_color="transparent")
+        scroll_container = ctk.CTkScrollableFrame(self.main_container, fg_color="transparent")
+        scroll_container.pack(fill="both", expand=True)
+        # HEADER
+        header_frame = ctk.CTkFrame(scroll_container, fg_color="transparent")
         header_frame.pack(fill="x", padx=60, pady=(40, 20))
 
         ctk.CTkLabel(header_frame, text="Prediction summary", font=("Arial Bold", 34), text_color="black").pack(
-            anchor="w")
+            anchor="center")
         ctk.CTkLabel(header_frame, text="Key numbers the model used to produce the estimate.", font=("Arial", 16),
-                     text_color="gray").pack(anchor="w")
+                     text_color="gray").pack(anchor="center")
 
-        # Контейнер для карточек
-        cards_frame = ctk.CTkFrame(self.main_container, fg_color="transparent")
+        # Container for cards
+        cards_frame = ctk.CTkFrame(scroll_container, fg_color="transparent")
         cards_frame.pack(fill="x", padx=60)
 
-        # Карточка 1: Predicted Price
-        self.create_result_card(cards_frame, "Predicted price", f"€ {price:,.2f}", "Most likely", 0)
 
-        # Карточка 2: Confidence
-        self.create_result_card(cards_frame, "Confidence", "0.82", "High", 1)
+        # Card 1: Predicted Price
+        self.create_result_card(cards_frame, "Predicted price", f"€ {price:.2f}", "Most likely", 0)
 
-        # Карточка 3: Price Range
+        # Card 2: Confidence
+        self.create_result_card(cards_frame, "Confidence", f"{confidence:.2f}", "High", 1)
+
+        # Card 3: Price Range
         low = price * 0.9
         high = price * 1.1
         self.create_result_card(cards_frame, "Price range", f"€ {low / 1000:.1f}k–{high / 1000:.1f}k", "± 10%", 2)
+
+        disclaimer_text = (
+            "DISCLAIMER: These estimates are for informational purposes only and "
+            "do not constitute financial advice. Real estate values are subject to "
+            "market volatility and data inaccuracies."
+        )
+
+
+        try:
+            img_raw = Image.open("correlation_heatmap.png")
+            self.home_img2 = ctk.CTkImage(light_image=img_raw, dark_image=img_raw, size=(1100, 700))
+            img_label = ctk.CTkLabel(scroll_container, image=self.home_img2, text="")
+            img_label.pack(pady = 40)
+        except Exception as e:
+            placeholder = ctk.CTkFrame(scroll_container, width=400, height=500, corner_radius=20)
+            placeholder.grid(row=0, column=0, padx=20, pady=20)
 
     def create_result_card(self, parent, title, value, subtext, col):
         card = ctk.CTkFrame(parent, fg_color="#FFFFFF", border_width=1, border_color="#E0E0E0", corner_radius=15,
@@ -569,7 +598,7 @@ class App(ctk.CTk):
     def show_processing_screen(self):
         self.clear_container()
         self.loading_lbl = ctk.CTkLabel(self.main_container,
-                                        text="Ваш запрос обрабатывается...\nПожалуйста, подождите.",
+                                        text="Your request is being processed...\nPlease wait.",
                                         font=("Arial Bold", 24), text_color="#1a1a1a")
         self.loading_lbl.place(relx=0.5, rely=0.5, anchor="center")
 
@@ -580,63 +609,56 @@ class App(ctk.CTk):
                 file_path = os.path.join(folder, filename)
                 try:
                     if os.path.isfile(file_path) or os.path.islink(file_path):
-                        os.unlink(file_path)  # Удаляет файл или ссылку
+                        os.unlink(file_path)
                     elif os.path.isdir(file_path):
-                        shutil.rmtree(file_path)  # Удаляет подпапку со всем содержимым
+                        shutil.rmtree(file_path)
                 except Exception as e:
-                    print(f'Не удалось удалить {file_path}. Причина: {e}')
+                    print(f'Failed to delete {file_path}. Reason: {e}')
         else:
-            os.makedirs(folder)  # Создаем пустую папку, если её нет
-
+            os.makedirs(folder)
     def start_ai_process(self):
-
-        if not self.is_data_complete():
-            self.show_error_screen("Неполные данные")
-            return
         self.save_to_json()
-
-        # 2. Показываем экран ожидания
-        self.show_processing_screen()
-
-        # 3. Запускаем ИИ в фоновом потоке
-        threading.Thread(target=self.run_ai_thread, daemon=True).start()
+        if (self.is_the_data_in_order):
+            self.show_processing_screen()
+            threading.Thread(target=self.run_ai_thread, daemon=True).start()
 
     def run_ai_thread(self):
-        # Вызов функции из ai_engine.py
-        result_price = main()
+        # Call function from ai_engine.py
+        main()
+        with open("results.json", "r", encoding="utf-8") as f:
+            list_res = json.load(f)
+            result_price = list_res["price"]
 
-        # Передаем результат обратно в основной поток через after()
-        self.after(0, lambda: self.show_results_screen(result_price))
+        with open("model_score.json", "r", encoding="utf-8") as file:
+            list_conf = json.load(file)
+            confidence = list_conf[0]["R2"]
+            print("CONF: ", confidence)
+
+        # Return result in main threat by after()
+        self.after(0, lambda: self.show_results_screen(result_price, confidence))
 
     def show_error_screen(self, message):
-        """Экран для вывода ошибки валидации"""
+
         self.clear_container()
 
         error_label = ctk.CTkLabel(
             self.main_container,
             text=message,
             font=("Arial Bold", 32),
-            text_color="#E74C3C"  # Красный цвет для ошибки
+            text_color="#E74C3C"
         )
         error_label.place(relx=0.5, rely=0.4, anchor="center")
 
-        # Кнопка возврата, чтобы пользователь мог дозаполнить поля
+
         back_btn = ctk.CTkButton(
             self.main_container,
-            text="Вернуться к вводу",
-            command=self.show_details_input,  # Возвращаем на экран ввода
+            text="Return to input",
+            command=self.show_details_input,  # Return to input screen
             fg_color="#1a1a1a"
         )
         back_btn.place(relx=0.5, rely=0.55, anchor="center")
 
-    def is_data_complete(self):
-        """Проверяет, чтобы все текстовые поля и меню были заполнены
-        for key, widget in self.inputs.items():
-            value = widget.get().strip()
-            # Проверяем на пустую строку или если это описание и оно пустое
-            if value == "" or value == "Text here...":
-                return False"""
-        return True
+
 
 if __name__ == "__main__":
     app = App()
