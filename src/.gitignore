@@ -2,7 +2,7 @@
 venv/
 env/
 .idea/
-data/
+data_src/
 
 
 data123.json

@@ -85,7 +85,7 @@ def descriptionpreprocessing(text):
 
     return embedding  # shape: (384,)
 
-path = "data"
+path = "data_src"
 
 folders = [f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
 rows = []

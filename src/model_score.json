@@ -1,16 +1,21 @@
-[
-  {
-    "model":"XGBoost",
+{
+  "model": "XGBoost",
+  "best_params": {
+    "n_estimators": 2000,
+    "max_depth": 5,
+    "learning_rate": 0.03,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8
+  },
+  "cross_validation": {
+    "cv_folds": 5,
+    "cv_metric": "MAE",
+    "cv_mae": 15234.78
+  },
+  "test_metrics": {
     "MAE":16011.5517578125,
     "RMSE":33522.8103833793,
     "MAPE":2.2316048145,
     "R2":0.8171667457
-  },
-  {
-    "model":"LightGBM",
-    "MAE":16172.4490145481,
-    "RMSE":31780.1885031224,
-    "MAPE":2.4310131037,
-    "R2":0.8356811996
   }
-]
+}
